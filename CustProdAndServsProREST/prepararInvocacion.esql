@@ -1,0 +1,34 @@
+CREATE COMPUTE MODULE prepararInvocacion
+CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CREATE FIELD OutputRoot;
+		DECLARE refInput REFERENCE TO InputRoot.JSON.Data;
+		DECLARE refHeaderIn REFERENCE TO InputRoot.HTTPInputHeader;
+		DECLARE userId REFERENCE TO refHeaderIn.Userid;
+		
+		IF validHeader(userId) THEN 
+			DECLARE trama CHARACTER '';
+			SET trama= prepararTrama(refInput, Environment);
+			CAll recibirTrama(trama,Environment,OutputRoot);
+         	--SET Environment.Valor2= recibirTrama(trama,Environment,OutputRoot);
+         	PROPAGATE TO TERMINAL 0;
+		ELSE
+			SET OutputRoot.HTTPResponseHeader.StatusCode=ERROR_400_CODE;
+			SET OutputRoot.HTTPResponseHeader.ReasonPhrase=ERROR_400;
+			SET OutputRoot.JSON.Data.Error=C_MSJ_ERROR_400;
+			PROPAGATE TO TERMINAL 1;
+			
+		END IF ;	
+		RETURN FALSE;
+		
+	END;
+END MODULE;
+
+CREATE FUNCTION validHeader(valueHeader CHARACTER) RETURNS BOOLEAN
+BEGIN
+	IF (valueHeader IS NOT NULL AND LENGTH(valueHeader)>1) THEN
+		RETURN TRUE;
+	ELSE 
+		RETURN FALSE;
+	END IF;		 
+END;

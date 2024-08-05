@@ -1,0 +1,5 @@
+
+DECLARE ERROR_400_CODE CONSTANT INTEGER 400;	
+DECLARE ERROR_400 CONSTANT CHARACTER 'BAD REQUEST';	
+DECLARE C_MSJ_ERROR_400 CONSTANT CHARACTER 'La solicitud no pudo ser entendida o tenía sintaxis incorrecta';				   
+			   

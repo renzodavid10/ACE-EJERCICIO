@@ -1,0 +1,26 @@
+
+
+
+CREATE COMPUTE MODULE parseaInformacion
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CREATE LASTCHILD OF OutputRoot DOMAIN 'JSON';
+		CREATE FIELD OutputRoot.JSON.Data;
+		DECLARE refout REFERENCE TO OutputRoot.JSON.Data;
+		DECLARE refIn REFERENCE TO InputRoot.BLOB.BLOB;
+		DECLARE response CHARACTER '';
+		SET response = CAST(refIn AS CHARACTER CCSID 1208);
+		SET refout.flag = SUBSTRING(response FROM 1 FOR 1);
+		SET refout.mensaje = SUBSTRING(response FROM 2 FOR 60);
+		SET refout.filler = SUBSTRING(response FROM 62 FOR 849);
+		
+		/*DECLARE refIn REFERENCE TO InputRoot.BLOB.BLOB;
+		-- Crear un campo en el ambiente para almacenar los datos parseados
+		CREATE FIELD Environment.DFDLData;
+		-- Parsear el BLOB de entrada usando el modelo DFDL
+		CREATE LASTCHILD OF Environment DOMAIN('DFDL')
+		PARSE(refIn,'','', '', progHostId, '', SET 'ADQCWVC' TYPE 'MyDFDLType');*/
+
+		RETURN TRUE;
+	END;
+END MODULE;

@@ -1,0 +1,88 @@
+
+
+
+CREATE PROCEDURE recibirTrama(IN trama CHARACTER,IN refEnv REFERENCE,IN OutRef REFERENCE)
+BEGIN
+
+	DECLARE trama1,trama2,trama3,trama4,trama5 CHARACTER '';
+	SET trama1 = '0123456789PRO10737487135USD';
+	SET trama2 = '0123456789PRO10737487135ABC';
+	SET trama3 = '0123456789PRO10737487135BCD';
+	SET trama4 = '0123456789PRO10737487135DEF';
+	SET trama5 = '0123456789PRO10737487135FGH';
+
+	IF(trama1 = trama) THEN
+	    CREATE LASTCHILD OF OutRef DOMAIN 'BLOB';
+	    CREATE FIELD OutRef.BLOB.BLOB;
+	    DECLARE Outre REFERENCE TO OutRef.BLOB.BLOB;
+		SET refEnv=CAST(FormatAlignCadena('1'||trama,910,' ','IZQ') AS BLOB CCSID 1208);
+		SET Outre=CAST(FormatAlignCadena('1'||trama,910,' ','IZQ') AS BLOB CCSID 1208);	
+--	DECLARE REF_OUT_CICS REFERENCE TO OutRef;
+--	SET REF_OUT_CICS.WVC_COD_UNICO = SUBSTRING(trama FROM 1 FOR 10);
+--	SET REF_OUT_CICS.WVC_COD_PRODUCTO = SUBSTRING(trama FROM 11 FOR 3);
+--	SET REF_OUT_CICS.WVC_RUC = SUBSTRING(trama FROM 14 FOR 11);
+--	SET REF_OUT_CICS.WVC_CODMON = SUBSTRING(trama FROM 25 FOR 3);
+--	CALL recibirResponder(REF_OUT_CICS);
+	--------------------------------------------------------------------------------------
+	ELSEIF (trama2 = trama) THEN
+		CREATE LASTCHILD OF OutRef DOMAIN 'BLOB';
+	    CREATE FIELD OutRef.BLOB.BLOB;
+	    DECLARE Outre REFERENCE TO OutRef.BLOB.BLOB;
+		SET refEnv=CAST(FormatAlignCadena('1'||trama,910,' ','IZQ') AS BLOB CCSID 1208);
+		SET Outre=CAST(FormatAlignCadena('1'||trama,910,' ','IZQ') AS BLOB CCSID 1208);	
+	ELSEIF (trama3 = trama) THEN
+		CREATE LASTCHILD OF OutRef DOMAIN 'BLOB';
+	    CREATE FIELD OutRef.BLOB.BLOB;
+	    DECLARE Outre REFERENCE TO OutRef.BLOB.BLOB;
+		SET refEnv=CAST(FormatAlignCadena('1'||trama,910,' ','IZQ') AS BLOB CCSID 1208);
+		SET Outre=CAST(FormatAlignCadena('1'||trama,910,' ','IZQ') AS BLOB CCSID 1208);	
+	ELSEIF (trama4 = trama) THEN
+		CREATE LASTCHILD OF OutRef DOMAIN 'BLOB';
+	    CREATE FIELD OutRef.BLOB.BLOB;
+	    DECLARE Outre REFERENCE TO OutRef.BLOB.BLOB;
+		SET refEnv=CAST(FormatAlignCadena('1'||trama,910,' ','IZQ') AS BLOB CCSID 1208);
+		SET Outre=CAST(FormatAlignCadena('1'||trama,910,' ','IZQ') AS BLOB CCSID 1208);			
+	ELSEIF (trama5 = trama) THEN	
+		CREATE LASTCHILD OF OutRef DOMAIN 'BLOB';
+	    CREATE FIELD OutRef.BLOB.BLOB;
+	    DECLARE Outre REFERENCE TO OutRef.BLOB.BLOB;
+		SET refEnv=CAST(FormatAlignCadena('1'||trama,910,' ','IZQ') AS BLOB CCSID 1208);
+		SET Outre=CAST(FormatAlignCadena('1'||trama,910,' ','IZQ') AS BLOB CCSID 1208);			
+	ELSE -- Si no coincide, enviar un error
+		CREATE LASTCHILD OF OutRef DOMAIN 'JSON';
+		CREATE FIELD OutRef.JSON.Data;
+		DECLARE Outre REFERENCE TO OutRef.JSON.Data;
+		SET Outre.informacion = 'DATOS INCORRECTOS';
+		SET Outre.datosInput = trama;
+		PROPAGATE TO TERMINAL 1;
+	END IF;
+
+END;
+
+CREATE FUNCTION FormatAlignCadena(IN cadena CHARACTER, IN longitud INT, IN char_repeat CHARACTER, IN align CHARACTER) RETURNS CHARACTER
+BEGIN
+	DECLARE int_length_orig INTEGER LENGTH(cadena);
+	IF (int_length_orig > longitud) THEN
+		SET cadena = LEFT(cadena, longitud);
+	ELSEIF (int_length_orig < longitud) THEN
+		IF (align = 'DER') THEN
+			SET cadena = REPLICATE(char_repeat,(longitud-int_length_orig)) || cadena;
+		ELSE
+			SET cadena = cadena || REPLICATE(char_repeat,(longitud-int_length_orig));
+		END IF;
+	END IF;
+	RETURN cadena;
+END;
+
+
+CREATE PROCEDURE recibirResponder(IN OutREf REFERENCE)
+BEGIN
+	DECLARE WVC_COD_UNICO,WVC_COD_PRODUCTO,WVC_RUC,WVC_CODMON CHARACTER '';
+	DECLARE inputRe REFERENCE TO OutREf;
+	SET WVC_COD_UNICO = inputRe.WVC_COD_UNICO;
+	SET WVC_COD_PRODUCTO = inputRe.WVC_COD_PRODUCTO;
+	SET WVC_RUC = inputRe.WVC_RUC;
+	SET WVC_CODMON = inputRe.WVC_CODMON;
+	IF(LENGTH(WVC_COD_UNICO)>0 AND LENGTH(WVC_COD_PRODUCTO)>0 AND LENGTH(WVC_RUC)>0 AND LENGTH(WVC_CODMON)>0) THEN
+	END IF;
+END;

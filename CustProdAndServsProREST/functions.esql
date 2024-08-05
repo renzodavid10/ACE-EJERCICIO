@@ -1,0 +1,35 @@
+CREATE PROCEDURE prepararDatosCICS(IN refIn REFERENCE, IN refHeaderIn REFERENCE, IN refEnv REFERENCE)BEGIN	
+	DECLARE chrCics CHARACTER '';	
+	SET chrCics =	
+	FormatAlignCadena(COALESCE(refIn.customerId,''), 10, ' ', 'IZQ') ||
+	FormatAlignCadena(COALESCE(refIn.productCode,''), 3, ' ', 'IZ') ||
+	FormatAlignCadena(COALESCE(refIn.ruc,''), 11, ' ', 'IZQ') ||
+	FormatAlignCadena(COALESCE(refIn.currencyCode,''), 3, ' ', 'IZ')||
+	FormatAlignCadena(' ', 1840, ' ', 'IZ');
+	
+	--CALL prepareTramaCICS(refEnv, chrCics, 1, NULL);
+
+END;
+
+CREATE FUNCTION prepararTrama(IN refIn REFERENCE, IN refEnv REFERENCE) returns character 
+BEGIN 
+	DECLARE chrCics CHARACTER '';	
+	SET chrCics =	
+	FormatAlignCadena(COALESCE(refIn.customerId,''), 10, ' ', 'IZQ') ||
+	FormatAlignCadena(COALESCE(refIn.productCode,''), 3, ' ', 'IZ') ||
+	FormatAlignCadena(COALESCE(refIn.ruc,''), 11, ' ', 'IZQ') ||
+	FormatAlignCadena(COALESCE(refIn.currencyCode,''), 3, ' ', 'IZ');
+	--||FormatAlignCadena(' ', 1840, ' ', 'IZ');
+	--CALL prepareTramaCICS(refEnv, chrCics);
+	SET refEnv.chrCicsData = chrCics;
+	RETURN chrCics;
+END;	
+	
+
+--CREATE PROCEDURE prepareTramaCICS(IN refEnv REFERENCE,IN chrCicsData CHARACTER)
+--BEGIN
+--
+--	SET refEnv.chrCicsData = chrCicsData;
+--END;
+
+

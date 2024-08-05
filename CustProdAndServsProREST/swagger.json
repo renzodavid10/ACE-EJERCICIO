@@ -1,0 +1,65 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "title" : "CustProdAndServsProREST",
+    "version" : "1.0.0",
+    "description" : "CustProdAndServsProREST"
+  },
+  "paths" : {
+    "/validarPersona" : {
+      "post" : {
+        "operationId" : "postValidarPersona",
+        "responses" : {
+          "200" : {
+            "description" : "The operation was successful.",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        },
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "description" : "Insert a validarPersona",
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "schema" : {
+            "$ref" : "#/definitions/Data"
+          },
+          "description" : "The request body for the operation",
+          "required" : true
+        }, {
+          "name" : "userId",
+          "in" : "header",
+          "type" : "string",
+          "required" : true
+        } ]
+      }
+    }
+  },
+  "basePath" : "/custprodandservsprorest/v1",
+  "definitions" : {
+    "Data" : {
+      "type" : "object",
+      "properties" : {
+        "customerId" : {
+          "type" : "string",
+          "format" : "string"
+        },
+        "productCode" : {
+          "type" : "string",
+          "format" : "string"
+        },
+        "ruc" : {
+          "type" : "string",
+          "format" : "string"
+        },
+        "currencyCode" : {
+          "type" : "string",
+          "format" : "string"
+        }
+      },
+      "required" : [ "customerId", "productCode", "ruc", "currencyCode" ]
+    }
+  }
+}
